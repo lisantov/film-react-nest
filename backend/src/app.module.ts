@@ -8,6 +8,7 @@ import { FilmsController } from './films/films.controller';
 import { OrderController } from './order/order.controller';
 import { Films } from './films/films';
 import { Order } from './order/order';
+import { FilmsRepository } from './films.repository/films.repository';
 
 @Module({
   imports: [
@@ -18,6 +19,6 @@ import { Order } from './order/order';
       // @todo: Добавьте раздачу статических файлов из public
   ],
   controllers: [FilmsController, OrderController],
-  providers: [configProvider, Films, Order],
+  providers: [configProvider, Films, Order, FilmsRepository],
 })
 export class AppModule {}
