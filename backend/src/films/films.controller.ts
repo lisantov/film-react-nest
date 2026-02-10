@@ -1,6 +1,5 @@
-import { BadRequestException, Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { FilmsService } from './films.service';
-import { isValidObjectId, ObjectId } from 'mongoose';
 
 @Controller('films')
 export class FilmsController {

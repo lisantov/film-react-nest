@@ -1,5 +1,9 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import mongoose, { Mongoose, ObjectId } from 'mongoose';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import mongoose, { Mongoose } from 'mongoose';
 import {
   IFilm,
   ISchedule,
@@ -7,6 +11,8 @@ import {
   GetFilmDto,
   GetFilmSchedulesDto,
 } from '../films/dto';
+import { OrderDto } from '../order/dto';
+import { randomUUID } from 'node:crypto';
 
 const ScheduleSchema = new mongoose.Schema<ISchedule>(
   {
@@ -97,7 +103,7 @@ const Film = mongoose.model<IFilm>('films', FilmSchema);
 
 @Injectable()
 export class MongoRepository {
-  constructor(@Inject('DATABASE') private connection: Mongoose) {}
+  constructor(private connection: Mongoose) {}
 
   async getAllFilms(): Promise<GetFilmsDto> {
     const films = await Film.find({}, { _id: 0, schedule: 0 });
@@ -126,6 +132,36 @@ export class MongoRepository {
     return {
       total: schedules.length,
       items: schedules,
+    };
+  }
+
+  async createOrder(order: Omit<OrderDto, 'id'>): Promise<OrderDto> {
+    const film = await Film.findOne({ id: order.film });
+
+    if (!film)
+      throw new NotFoundException(`С фильм с Id ${order.film} не найден`);
+
+    const scheduleIndex = film.schedule.findIndex(
+      (s) => s.id === order.session,
+    );
+
+    if (scheduleIndex === -1)
+      throw new NotFoundException(`Сеанс с Id ${order.session} не найден`);
+
+    const newTaken = `${order.row}:${order.seat}`;
+    const duplicateSeat = film.schedule[scheduleIndex].taken.findIndex(
+      (s) => s === newTaken,
+    );
+
+    if (duplicateSeat !== -1)
+      throw new ConflictException('Это место уже занято');
+
+    film.schedule[scheduleIndex].taken.push(newTaken);
+    await film.save();
+
+    return {
+      ...order,
+      id: randomUUID(),
     };
   }
 }
