@@ -11,11 +11,11 @@ export class FilmsService {
     return this.filmsRepository.getAllFilms();
   }
 
-  getFilmById(id: ObjectId): Promise<GetFilmDto> {
+  getFilmById(id: string): Promise<GetFilmDto> {
     return this.filmsRepository.getFilmById(id);
   }
 
-  getFilmSchedulesById(id: ObjectId): Promise<GetFilmSchedulesDto> {
+  getFilmSchedulesById(id: string): Promise<GetFilmSchedulesDto> {
     return this.filmsRepository.getFilmSchedulesById(id);
   }
 }

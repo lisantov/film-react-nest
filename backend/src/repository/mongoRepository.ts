@@ -41,6 +41,7 @@ const ScheduleSchema = new mongoose.Schema<ISchedule>(
   },
   {
     versionKey: false,
+    _id: false,
   },
 );
 
@@ -99,15 +100,15 @@ export class MongoRepository {
   constructor(@Inject('DATABASE') private connection: Mongoose) {}
 
   async getAllFilms(): Promise<GetFilmsDto> {
-    const films = await Film.find();
+    const films = await Film.find({}, { _id: 0, schedule: 0 });
     return {
       total: films.length,
       items: films,
     };
   }
 
-  async getFilmById(id: ObjectId): Promise<GetFilmDto> {
-    const film = await Film.findOne({ id });
+  async getFilmById(id: string): Promise<GetFilmDto> {
+    const film = await Film.findOne({ id }).select('-_id');
 
     if (!film) throw new NotFoundException('С фильм с переданным Id не найден');
 
@@ -116,7 +117,7 @@ export class MongoRepository {
     };
   }
 
-  async getFilmSchedulesById(id: ObjectId): Promise<GetFilmSchedulesDto> {
+  async getFilmSchedulesById(id: string): Promise<GetFilmSchedulesDto> {
     const film = await Film.findOne({ id });
 
     if (!film) throw new NotFoundException('С фильм с переданным Id не найден');

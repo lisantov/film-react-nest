@@ -12,9 +12,7 @@ export class FilmsController {
   }
 
   @Get(':id/schedule')
-  getFilmById(@Param('id') id: ObjectId) {
-    if (!isValidObjectId(id))
-      throw new BadRequestException('Передан не валидный Id');
+  getFilmById(@Param('id') id: string) {
     return this.filmsService.getFilmSchedulesById(id!);
   }
 }
