@@ -1,5 +1,6 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { BadRequestException, Controller, Get, Param } from '@nestjs/common';
 import { FilmsService } from './films.service';
+import { isValidObjectId, ObjectId } from 'mongoose';
 
 @Controller('films')
 export class FilmsController {
@@ -11,7 +12,9 @@ export class FilmsController {
   }
 
   @Get(':id/schedule')
-  getFilmById(@Param('id') id: string) {
-    return `Тут вернётся фильм с id ${id}`;
+  getFilmById(@Param('id') id: ObjectId) {
+    if (!isValidObjectId(id))
+      throw new BadRequestException('Передан не валидный Id');
+    return this.filmsService.getFilmSchedulesById(id!);
   }
 }

@@ -3,7 +3,7 @@ import { FilmsController } from './films.controller';
 import { FilmsService } from './films.service';
 import { AppConfig, configProvider } from '../app.config.provider';
 import mongoose from 'mongoose';
-import { FilmsRepository } from './films.repository';
+import { MongoRepository } from '../repository/mongoRepository';
 
 const databaseProvider = {
   provide: 'DATABASE',
@@ -18,6 +18,6 @@ const databaseProvider = {
 
 @Module({
   controllers: [FilmsController],
-  providers: [FilmsService, databaseProvider, FilmsRepository, configProvider],
+  providers: [FilmsService, databaseProvider, MongoRepository, configProvider],
 })
 export class FilmsModule {}
