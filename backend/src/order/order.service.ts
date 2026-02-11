@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CreateOrderDtoResponse, OrderDto } from './dto';
+import { CreateOrderDtoResponse, CreateOrderDtoBody } from './dto';
 import { IRepository } from '../database/database.module';
 
 @Injectable()
@@ -8,8 +8,10 @@ export class OrderService {
     @Inject('DATABASE') private readonly filmsRepository: IRepository,
   ) {}
 
-  async createOrder(orders: OrderDto[]): Promise<CreateOrderDtoResponse> {
-    const itemsPromise = orders.map((order) =>
+  async createOrder(
+    order: CreateOrderDtoBody,
+  ): Promise<CreateOrderDtoResponse> {
+    const itemsPromise = order.tickets.map((order) =>
       this.filmsRepository.createOrder(order),
     );
 
