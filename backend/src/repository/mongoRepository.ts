@@ -13,6 +13,7 @@ import {
 } from '../films/dto';
 import { OrderDto } from '../order/dto';
 import { randomUUID } from 'node:crypto';
+import { IRepository } from '../database/database.module';
 
 const ScheduleSchema = new mongoose.Schema<ISchedule>(
   {
@@ -102,7 +103,7 @@ const FilmSchema = new mongoose.Schema<IFilm>(
 const Film = mongoose.model<IFilm>('films', FilmSchema);
 
 @Injectable()
-export class MongoRepository {
+export class MongoRepository implements IRepository {
   constructor(private connection: Mongoose) {}
 
   async getAllFilms(): Promise<GetFilmsDto> {

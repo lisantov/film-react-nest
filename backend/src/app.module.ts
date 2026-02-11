@@ -14,7 +14,7 @@ import { DatabaseModule } from './database/database.module';
       cache: true,
     }),
     ServeStaticModule.forRoot({
-      rootPath: path.join(__dirname, '..', '..', 'public'),
+      rootPath: path.join(__dirname, '..', 'public'),
     }),
     FilmsModule,
     OrderModule,

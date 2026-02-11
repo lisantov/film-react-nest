@@ -1,11 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { MongoRepository } from '../repository/mongoRepository';
 import { CreateOrderDtoResponse, OrderDto } from './dto';
+import { IRepository } from '../database/database.module';
 
 @Injectable()
 export class OrderService {
   constructor(
-    @Inject('DATABASE') private readonly filmsRepository: MongoRepository,
+    @Inject('DATABASE') private readonly filmsRepository: IRepository,
   ) {}
 
   async createOrder(orders: OrderDto[]): Promise<CreateOrderDtoResponse> {
