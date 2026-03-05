@@ -23,6 +23,8 @@ export interface IRepository {
             return new MongoRepository(
               await mongoose.connect(config.database.url),
             );
+          case 'postgres':
+            break;
           default:
             throw new Error(
               `Неподдерживаемая База данных: ${config.database.driver}`,
