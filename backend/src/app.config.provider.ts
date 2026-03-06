@@ -8,6 +8,7 @@ export const configProvider = {
       url: process.env.DATABASE_URL,
       driver: process.env.DATABASE_DRIVER,
       name: process.env.DATABASE_NAME,
+      username: process.env.DATABASE_USERNAME,
       password: process.env.DATABASE_PASSWORD,
     },
   },
@@ -21,5 +22,6 @@ export interface AppConfigDatabase {
   driver: string;
   url: string;
   name: string;
+  username: string;
   password: string;
 }

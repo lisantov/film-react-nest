@@ -4,6 +4,9 @@ import mongoose from 'mongoose';
 import { MongoRepository } from '../repository/mongoRepository';
 import { GetFilmDto, GetFilmSchedulesDto, GetFilmsDto } from '../films/dto';
 import { OrderDto } from '../order/dto';
+import { DataSource } from 'typeorm';
+import { Film, Schedule } from '../entities';
+import { PostgresRepository } from '../repository/postgresRepository';
 
 export interface IRepository {
   getAllFilms(): Promise<GetFilmsDto>;
@@ -24,7 +27,20 @@ export interface IRepository {
               await mongoose.connect(config.database.url),
             );
           case 'postgres':
-            break;
+            const dataSource = new DataSource({
+              type: 'postgres',
+              host: 'localhost',
+              port: 5432,
+              username: config.database.username,
+              password: config.database.password,
+              database: config.database.name,
+              entities: [Film, Schedule],
+              synchronize: true,
+            });
+
+            await dataSource.initialize();
+
+            return new PostgresRepository(dataSource);
           default:
             throw new Error(
               `Неподдерживаемая База данных: ${config.database.driver}`,

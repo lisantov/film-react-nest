@@ -13,7 +13,7 @@ export function Header({ counter, onClick }: HeaderProps) {
                 <img
                     className={styles.logoImage}
                     src={logo}
-                    alt="Film! logo"
+                    alt="FilmEntity! logo"
                 />
             </a>
             <button className={styles.basket} onClick={onClick}>
