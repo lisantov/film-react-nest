@@ -35,7 +35,7 @@ export interface IRepository {
               password: config.database.password,
               database: config.database.name,
               entities: [Film, Schedule],
-              synchronize: true,
+              synchronize: false,
             });
 
             await dataSource.initialize();

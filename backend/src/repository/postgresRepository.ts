@@ -21,7 +21,10 @@ export class PostgresRepository implements IRepository {
   }
 
   async getAllFilms(): Promise<GetFilmsDto> {
-    const films = await this.filmRepository.find({ relations: ['schedule'] });
+    const films = await this.filmRepository.find({ relations: {
+            schedules: true,
+        }
+    });
     return {
       total: films.length,
       items: films,
@@ -39,7 +42,7 @@ export class PostgresRepository implements IRepository {
   }
 
   async getFilmSchedulesById(id: string): Promise<GetFilmSchedulesDto> {
-    const film = await this.filmRepository.findOne({ where: { id } });
+    const film = await this.filmRepository.findOne({ where: { id }, relations: { schedules: true } });
 
     if (!film) throw new NotFoundException('С фильм с переданным Id не найден');
 
@@ -55,7 +58,7 @@ export class PostgresRepository implements IRepository {
       where: { id: order.session },
     });
 
-    if (schedule)
+    if (!schedule)
       throw new NotFoundException(`Сеанс с Id ${order.session} не найден`);
 
     const newTaken = `${order.row}:${order.seat}`;

@@ -2,18 +2,18 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { FilmDto } from '../films/dto';
 import { Schedule } from './schedule.entity';
 
-@Entity()
+@Entity('films')
 export class Film extends FilmDto {
   @PrimaryGeneratedColumn()
   id: string;
 
-  @Column()
+  @Column({ nullable: true })
   rating: number;
 
   @Column()
   director: string;
 
-  @Column()
+  @Column('simple-array')
   tags: string[];
 
   @Column()
@@ -31,6 +31,6 @@ export class Film extends FilmDto {
   @Column()
   description: string;
 
-  @OneToMany(() => Schedule, (schedule) => schedule.id)
+  @OneToMany(() => Schedule, (schedule) => schedule.film)
   schedules: Schedule[];
 }

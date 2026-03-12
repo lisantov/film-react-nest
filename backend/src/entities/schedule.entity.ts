@@ -2,7 +2,7 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { ScheduleDto } from '../films/dto';
 import { Film } from './film.entity';
 
-@Entity()
+@Entity('schedules')
 export class Schedule extends ScheduleDto {
   @PrimaryGeneratedColumn()
   id: string;
@@ -19,10 +19,10 @@ export class Schedule extends ScheduleDto {
   @Column()
   seats: number;
 
-  @Column()
+  @Column({ nullable: true })
   price: number;
 
-  @Column()
+  @Column('simple-array')
   taken: string[];
 
   @ManyToOne(() => Film, (film) => film.schedules)
