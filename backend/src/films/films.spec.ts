@@ -1,8 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { FilmsController } from './films.controller';
 import { FilmsService } from "./films.service";
 import { IRepository } from "../database/database.module";
-import { PostgresRepository } from "../repository/postgresRepository";
 
 const schedules = [{
     id: '11',
