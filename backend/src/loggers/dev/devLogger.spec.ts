@@ -2,7 +2,6 @@ import { DevLogger } from './devLogger';
 import { ConsoleLogger } from "@nestjs/common";
 
 describe('Dev Logger', () => {
-    // Вспомогательная функция для создания моков методов ConsoleLogger
     const setupMocks = (loggerInstance: DevLogger) => {
         const logSpy = jest.spyOn(loggerInstance, 'log');
         const superLogSpy = jest.spyOn(ConsoleLogger.prototype, 'log').mockImplementation(() => {});
@@ -44,7 +43,7 @@ describe('Dev Logger', () => {
             expect(superLogSpy).toHaveBeenCalledWith('TEST: hello world');
         });
 
-        it('should pass additional arguments to super.log', () => {
+        it('Should call super.log with additional args', () => {
             const logger = new DevLogger('TEST');
             const { logSpy, superLogSpy } = setupMocks(logger);
             const extraArgs = ['context', { meta: 'data' }];
