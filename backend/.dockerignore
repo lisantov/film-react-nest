@@ -14,9 +14,8 @@ LICENSE
 dist/
 build/
 
-# Stories
-.storybook/
-*.stories.*
+# Tests
+test/
 
 # IDE Files
 .idea/
