@@ -19,13 +19,13 @@ services:
     restart: on-failure
     build:
       context: ../../backend
-      dockerfile: ../../backend/Dockerfile.production
+      dockerfile: ./Dockerfile.production
     image: film-backend:prod
     container_name: film-backend
     env_file:
       - ../../backend/.env
-    profiles:
-      - prod
+    environment:
+      DATABASE_HOST: "postgres"
     depends_on:
       postgres:
         condition: service_started
@@ -37,7 +37,7 @@ services:
     restart: on-failure
     build:
       context: ../../frontend
-      dockerfile: ../../frontend/Dockerfile.production
+      dockerfile: ./Dockerfile.production
     image: film-frontend:prod
     container_name: film-frontend
     env_file:
@@ -49,9 +49,10 @@ services:
     image: postgres:16-alpine
     container_name: postgres
     restart: always
-    env_file:
-      - ../.env
     environment:
+      POSTGRES_DB: prac
+      POSTGRES_USER: prac
+      POSTGRES_PASSWORD: prac
       PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
       - ./film_postgres_data:/var/lib/postgresql/data/pgdata
