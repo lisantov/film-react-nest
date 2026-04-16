@@ -1,4 +1,4 @@
-FROM node:24-alpine AS builder
+FROM node:24-alpine
 
 WORKDIR /var/www/app
 
@@ -8,6 +8,6 @@ RUN npm i
 
 COPY . .
 
-EXPOSE 5555
+EXPOSE 8888
 
 CMD ["npm", "run", "start"]

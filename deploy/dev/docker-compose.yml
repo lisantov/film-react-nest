@@ -1,0 +1,78 @@
+services:
+  nginx-server:
+    build:
+      context: ../nginx
+      dockerfile: ../nginx/Dockerfile
+    container_name: nginx
+    networks:
+      - dev
+    ports:
+      - "80:80"
+    volumes:
+      - ../nginx/conf/:/etc/nginx/conf.d/
+    depends_on:
+      - backend
+      - frontend
+
+  backend:
+    restart: unless-stopped
+    build:
+      context: ../../backend
+      dockerfile: ./Dockerfile.dev
+    image: film-backend:dev
+    container_name: film-backend
+    volumes:
+      - ../../backend:/var/www/app
+      - /var/www/app/node_modules
+    env_file:
+      - ../../backend/.env
+    environment:
+      DATABASE_HOST: "postgres"
+    depends_on:
+      postgres:
+        condition: service_started
+    networks:
+      - dev
+
+  frontend:
+    restart: unless-stopped
+    build:
+      context: ../../frontend
+      dockerfile: ./Dockerfile.dev
+    image: film-frontend:dev
+    container_name: film-frontend
+    volumes:
+      - ../../frontend:/var/www/app
+      - /var/www/app/node_modules
+    env_file:
+      - ../../frontend/.env
+    networks:
+      - dev
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres
+    restart: always
+    env_file:
+      - ../.env
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+    networks:
+      - dev
+
+  pgadmin:
+    image: elestio/pgadmin
+    container_name: pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.ru
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_LISTEN_PORT: 8080
+    ports:
+      - "8080:8080"
+    networks:
+      - dev
+
+networks:
+  dev:
+    driver: bridge

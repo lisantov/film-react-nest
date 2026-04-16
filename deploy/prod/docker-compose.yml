@@ -1,0 +1,83 @@
+services:
+  nginx-server:
+    build:
+      context: ../nginx
+      dockerfile: ../nginx/Dockerfile
+    container_name: nginx
+    networks:
+      - frontend
+      - backend
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/conf/:/etc/nginx/conf.d/
+    depends_on:
+      - backend
+      - frontend
+
+  backend:
+    restart: on-failure
+    build:
+      context: ../../backend
+      dockerfile: ../../backend/Dockerfile.production
+    image: film-backend:prod
+    container_name: film-backend
+    env_file:
+      - ../../backend/.env
+    profiles:
+      - prod
+    depends_on:
+      postgres:
+        condition: service_started
+    networks:
+      - backend
+      - database
+
+  frontend:
+    restart: on-failure
+    build:
+      context: ../../frontend
+      dockerfile: ../../frontend/Dockerfile.production
+    image: film-frontend:prod
+    container_name: film-frontend
+    env_file:
+      - ../../frontend/.env
+    networks:
+      - frontend
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres
+    restart: always
+    env_file:
+      - ../.env
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - ./film_postgres_data:/var/lib/postgresql/data/pgdata
+    networks:
+      - database
+      - admin
+
+  pgadmin:
+    image: elestio/pgadmin
+    container_name: pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.ru
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_LISTEN_PORT: 8080
+    ports:
+      - "8080:8080"
+    networks:
+      - admin
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
+  database:
+    driver: bridge
+  admin:
+    driver: bridge

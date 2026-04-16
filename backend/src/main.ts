@@ -27,6 +27,6 @@ async function bootstrap() {
   app.setGlobalPrefix('api/afisha');
   app.useLogger(getLoggerFromEnvironment());
   app.enableCors();
-  await app.listen(3000);
+  await app.listen(process.env.APP_PORT ?? 3000);
 }
 void bootstrap();

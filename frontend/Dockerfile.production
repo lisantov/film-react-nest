@@ -16,6 +16,6 @@ WORKDIR /var/www/app
 
 COPY --from=builder /var/www/app/dist ./dist/
 
-EXPOSE 80
+EXPOSE 3000
 
-CMD []
+CMD ["serve", "-s", "dist", "-l", "3000"]
