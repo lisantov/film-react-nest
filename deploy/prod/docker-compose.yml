@@ -4,6 +4,7 @@ services:
     build:
       context: ../nginx
       dockerfile: ../nginx/Dockerfile
+    image: ghcr.io/lisantov/film-react-nest/nginx:main
     container_name: nginx
     networks:
       - frontend
@@ -21,7 +22,7 @@ services:
     build:
       context: ../../backend
       dockerfile: ./Dockerfile.production
-    image: film-backend:prod
+    image: ghcr.io/lisantov/film-react-nest/backend:main
     container_name: film-backend
     env_file:
       - ../../backend/.env
@@ -39,7 +40,7 @@ services:
     build:
       context: ../../frontend
       dockerfile: ./Dockerfile.production
-    image: film-frontend:prod
+    image: ghcr.io/lisantov/film-react-nest/frontend:main
     container_name: film-frontend
     env_file:
       - ../../frontend/.env
