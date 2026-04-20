@@ -3,7 +3,7 @@ import { OrderDto } from './order.dto';
 export class CreateOrderDtoBody {
   email: string;
   phone: string;
-  tickets: OrderDto[];
+  tickets: Omit<OrderDto, 'id'>[];
 }
 
 export class CreateOrderDtoResponse {
