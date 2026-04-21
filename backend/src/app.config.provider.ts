@@ -5,6 +5,7 @@ export const configProvider = {
   provide: 'CONFIG',
   useValue: <AppConfig>{
     database: {
+      host: process.env.DATABASE_HOST,
       url: process.env.DATABASE_URL,
       driver: process.env.DATABASE_DRIVER,
       name: process.env.DATABASE_NAME,
@@ -19,6 +20,7 @@ export interface AppConfig {
 }
 
 export interface AppConfigDatabase {
+  host: string;
   driver: string;
   url: string;
   name: string;

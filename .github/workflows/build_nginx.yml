@@ -1,0 +1,45 @@
+name: Build and push Nginx
+
+env:
+  REGISTRY: ghcr.io
+
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - 'deploy/nginx/**'
+      - 'deploy/prod/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Code checkout
+        uses: actions/checkout@v4
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: ${{env.REGISTRY}}/${{ github.repository }}/nginx
+
+      - name: Login to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push nginx image
+        uses: docker/build-push-action@v5.3.0
+        with:
+          context: ./deploy/nginx
+          file: ./deploy/nginx/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}

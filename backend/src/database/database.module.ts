@@ -29,7 +29,7 @@ export interface IRepository {
           case 'postgres':
             const dataSource = new DataSource({
               type: 'postgres',
-              host: 'localhost',
+              host: config.database.host,
               port: 5432,
               username: config.database.username,
               password: config.database.password,

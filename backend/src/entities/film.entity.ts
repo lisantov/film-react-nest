@@ -31,14 +31,10 @@ export class Film extends FilmDto {
   @Column()
   description: string;
 
-  @OneToMany(
-      () => Schedule,
-      (schedule) => schedule.film,
-      {
-          cascade: true,
-          onDelete: 'CASCADE',
-          onUpdate: 'CASCADE',
-      }
-  )
+  @OneToMany(() => Schedule, (schedule) => schedule.film, {
+    cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   schedules: Schedule[];
 }
