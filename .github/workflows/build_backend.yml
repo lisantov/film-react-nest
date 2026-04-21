@@ -9,6 +9,7 @@ on:
       - '**'
     paths:
       - 'backend/**'
+      - 'deploy/prod/**'
 
 jobs:
   build:
