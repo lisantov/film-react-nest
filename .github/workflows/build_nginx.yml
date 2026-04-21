@@ -9,6 +9,7 @@ on:
       - '**'
     paths:
       - 'deploy/nginx/**'
+      - 'deploy/prod/**'
 
 jobs:
   build:
