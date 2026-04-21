@@ -14,6 +14,7 @@ FROM node:24-alpine AS production
 
 WORKDIR /var/www/app
 
+COPY ./public ./dist/public
 COPY --from=builder /var/www/app/dist ./dist/
 COPY --from=builder /var/www/app/package*.json ./
 
